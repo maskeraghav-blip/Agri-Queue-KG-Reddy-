@@ -2,12 +2,15 @@ node_modules/
 client/node_modules/
 server/node_modules/
 
-# Environment files
+# Environment & Secret files
 .env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+.env*
+**/.env*
+*.key
+*.pem
+*.cert
+*.p12
+*.crt
 
 # Build output
 dist/
