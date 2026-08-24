@@ -87,7 +87,16 @@ export default function SeedsCatalog() {
                 }}>
                   {/* Product Image */}
                   <div style={{ position: 'relative', height: 200, width: '100%', backgroundColor: '#F8F9FA' }}>
-                    <img src={seed.image} alt={seed.name} loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    <img 
+                      src={seed.image || '/images/seed_packet.jpg'} 
+                      alt={seed.name} 
+                      loading="lazy" 
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = '/images/seed_packet.jpg';
+                      }}
+                      style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                    />
                     
                     {/* Badge */}
                     {seed.badge && (

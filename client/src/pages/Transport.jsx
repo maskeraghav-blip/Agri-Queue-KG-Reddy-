@@ -15,7 +15,8 @@ export default function Transport() {
       price: 500,
       unit: '/trip',
       rating: '4.8',
-      image: '/images/truck1.jpg',
+      image: 'https://images.unsplash.com/photo-1559297434-fae8a1916a79?w=600&auto=format&fit=crop&q=80',
+      fallbackImage: '/images/truck1.jpg',
       tags: ['1 Ton Capacity', 'Fast']
     },
     {
@@ -25,7 +26,8 @@ export default function Transport() {
       price: 1200,
       unit: '/trip',
       rating: '4.9',
-      image: '/images/truck2.jpg',
+      image: 'https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=600&auto=format&fit=crop&q=80',
+      fallbackImage: '/images/truck2.jpg',
       tags: ['5 Ton Capacity', 'Covered']
     },
     {
@@ -35,7 +37,8 @@ export default function Transport() {
       price: 800,
       unit: '/trip',
       rating: '4.5',
-      image: '/images/truck3.jpg',
+      image: 'https://images.unsplash.com/photo-1592878904946-b3cd8ae243d0?w=600&auto=format&fit=crop&q=80',
+      fallbackImage: '/images/truck3.jpg',
       tags: ['Local Transport', 'High Torque']
     },
     {
@@ -45,7 +48,8 @@ export default function Transport() {
       price: 2500,
       unit: '/trip',
       rating: '4.2',
-      image: '/images/truck4.jpg',
+      image: 'https://images.unsplash.com/photo-1519003722824-194d4455a60c?w=600&auto=format&fit=crop&q=80',
+      fallbackImage: '/images/truck4.jpg',
       tags: ['Cold Storage', 'Long Distance']
     }
   ];
@@ -83,7 +87,16 @@ export default function Transport() {
             }}>
               {/* Image */}
               <div style={{ position: 'relative', height: 200, backgroundColor: '#F8F9FA' }}>
-                <img src={asset.image} alt={asset.name} loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                <img 
+                  src={asset.image} 
+                  alt={asset.name} 
+                  loading="lazy" 
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = asset.fallbackImage || '/images/truck1.jpg';
+                  }}
+                  style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                />
                 
                 {/* Rating */}
                 <div style={{ position: 'absolute', top: 12, right: 12, background: 'rgba(255,255,255,0.9)', color: '#D97706', padding: '4px 8px', borderRadius: '6px', fontSize: '0.85rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 4, boxShadow: '0 1px 2px rgba(0,0,0,0.1)' }}>
