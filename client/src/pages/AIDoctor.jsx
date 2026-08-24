@@ -45,7 +45,7 @@ export default function AIDoctor() {
         setResult({
           disease: 'Analysis Error',
           confidence: 'N/A',
-          recommendation: err.response?.data?.error || 'Failed to reach AI Server. Ensure GEMINI_API_KEY is set in .env.',
+          recommendation: err.response?.data?.error || 'Failed to reach AI Server. Ensure GROQ_API_KEY is configured in server/.env.',
           crop: 'Unknown'
         });
       } finally {
@@ -168,28 +168,55 @@ export default function AIDoctor() {
               <div className="animate-in" style={{ marginTop: 24 }}>
                 <h3 style={{ color: 'var(--color-primary-dark)', marginBottom: 16 }}>📋 Analysis Result</h3>
                 
-                <div style={{ display: 'grid', gap: 12 }}>
-                  <div style={{ background: 'var(--color-bg)', padding: 12, borderRadius: 'var(--radius-sm)', borderLeft: '4px solid var(--color-error)' }}>
-                    <div style={{ fontSize: 12, color: 'var(--color-text-secondary)', marginBottom: 4 }}>Detected Disease</div>
-                    <div style={{ fontWeight: 'bold', fontSize: 16, color: 'var(--color-error)' }}>{result.disease}</div>
+                {/* Not a plant warning */}
+                {result.is_plant === false && (
+                  <div style={{ background: '#fff8e1', padding: 16, borderRadius: 'var(--radius-sm)', borderLeft: '4px solid #f59e0b', marginBottom: 12 }}>
+                    <div style={{ fontSize: 14, fontWeight: 'bold', color: '#b45309', marginBottom: 8 }}>⚠️ Not an Agricultural Image</div>
+                    <div style={{ lineHeight: 1.5, fontSize: 15, color: '#92400e' }}>{result.recommendation}</div>
                   </div>
-                  
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-                    <div style={{ background: 'var(--color-bg)', padding: 12, borderRadius: 'var(--radius-sm)', borderLeft: '4px solid var(--color-primary)' }}>
-                      <div style={{ fontSize: 12, color: 'var(--color-text-secondary)', marginBottom: 4 }}>Confidence Score</div>
-                      <div style={{ fontWeight: 'bold', fontSize: 16 }}>{result.confidence}</div>
-                    </div>
-                    <div style={{ background: 'var(--color-bg)', padding: 12, borderRadius: 'var(--radius-sm)', borderLeft: '4px solid #f59e0b' }}>
-                      <div style={{ fontSize: 12, color: 'var(--color-text-secondary)', marginBottom: 4 }}>Crop</div>
-                      <div style={{ fontWeight: 'bold', fontSize: 16 }}>{result.crop}</div>
-                    </div>
-                  </div>
+                )}
 
-                  <div style={{ background: 'var(--color-accent-bg)', padding: 16, borderRadius: 'var(--radius-sm)', borderLeft: '4px solid var(--color-accent)' }}>
-                    <div style={{ fontSize: 12, color: 'var(--color-accent-dark)', marginBottom: 8, fontWeight: 600 }}>Recommended Treatment</div>
+                {/* AI unavailable error */}
+                {result.is_plant === null && (
+                  <div style={{ background: '#f3f4f6', padding: 16, borderRadius: 'var(--radius-sm)', borderLeft: '4px solid #6b7280', marginBottom: 12 }}>
+                    <div style={{ fontSize: 14, fontWeight: 'bold', color: '#374151', marginBottom: 8 }}>🔌 {result.disease}</div>
+                    <div style={{ lineHeight: 1.5, fontSize: 15, color: '#4b5563' }}>{result.recommendation}</div>
+                  </div>
+                )}
+
+                {/* Actual plant diagnosis result */}
+                {(result.is_plant === true || result.is_plant === undefined) && result.disease !== 'Analysis Error' && (
+                  <div style={{ display: 'grid', gap: 12 }}>
+                    <div style={{ background: 'var(--color-bg)', padding: 12, borderRadius: 'var(--radius-sm)', borderLeft: `4px solid ${result.disease?.toLowerCase().includes('healthy') ? '#10b981' : 'var(--color-error)'}` }}>
+                      <div style={{ fontSize: 12, color: 'var(--color-text-secondary)', marginBottom: 4 }}>Detected Disease</div>
+                      <div style={{ fontWeight: 'bold', fontSize: 16, color: result.disease?.toLowerCase().includes('healthy') ? '#10b981' : 'var(--color-error)' }}>{result.disease}</div>
+                    </div>
+                    
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+                      <div style={{ background: 'var(--color-bg)', padding: 12, borderRadius: 'var(--radius-sm)', borderLeft: '4px solid var(--color-primary)' }}>
+                        <div style={{ fontSize: 12, color: 'var(--color-text-secondary)', marginBottom: 4 }}>Confidence Score</div>
+                        <div style={{ fontWeight: 'bold', fontSize: 16 }}>{result.confidence}</div>
+                      </div>
+                      <div style={{ background: 'var(--color-bg)', padding: 12, borderRadius: 'var(--radius-sm)', borderLeft: '4px solid #f59e0b' }}>
+                        <div style={{ fontSize: 12, color: 'var(--color-text-secondary)', marginBottom: 4 }}>Crop</div>
+                        <div style={{ fontWeight: 'bold', fontSize: 16 }}>{result.crop}</div>
+                      </div>
+                    </div>
+
+                    <div style={{ background: 'var(--color-accent-bg)', padding: 16, borderRadius: 'var(--radius-sm)', borderLeft: '4px solid var(--color-accent)' }}>
+                      <div style={{ fontSize: 12, color: 'var(--color-accent-dark)', marginBottom: 8, fontWeight: 600 }}>Recommended Treatment</div>
+                      <div style={{ lineHeight: 1.5, fontSize: 15 }}>{result.recommendation}</div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Legacy error handling */}
+                {result.disease === 'Analysis Error' && (
+                  <div style={{ background: '#fef2f2', padding: 16, borderRadius: 'var(--radius-sm)', borderLeft: '4px solid var(--color-error)' }}>
+                    <div style={{ fontSize: 14, fontWeight: 'bold', color: 'var(--color-error)', marginBottom: 8 }}>❌ {result.disease}</div>
                     <div style={{ lineHeight: 1.5, fontSize: 15 }}>{result.recommendation}</div>
                   </div>
-                </div>
+                )}
               </div>
             )}
           </div>

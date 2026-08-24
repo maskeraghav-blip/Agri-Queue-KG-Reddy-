@@ -1,4 +1,4 @@
-const { GoogleGenerativeAI } = require('@google/generative-ai');
+const { generateChatCompletion } = require('../services/aiService');
 
 const SYSTEM_PROMPT = `You are AgriBot, an AI assistant for AgriQueue — a Smart Crop Procurement Platform for Indian farmers.
 
@@ -26,6 +26,32 @@ setInterval(() => {
   }
 }, 30 * 60 * 1000);
 
+function getSmartFallbackReply(message) {
+  const m = (message || '').toLowerCase();
+  if (m.includes('slot') || m.includes('book') || m.includes('booking') || m.includes('टोकन') || m.includes('బుకింగ్')) {
+    return {
+      reply: 'You can book your procurement token by visiting the Book Slot page in the AgriQueue app, selecting your nearest mandi and date.',
+      lang: 'en-US'
+    };
+  }
+  if (m.includes('mandi') || m.includes('price') || m.includes('भाव') || m.includes('ధర')) {
+    return {
+      reply: 'Current crop MSP prices and real-time mandi rates are available on the Market Prices page with daily arrivals and trends.',
+      lang: 'en-US'
+    };
+  }
+  if (m.includes('scheme') || m.includes('yojana') || m.includes('योजना') || m.includes('పథకం')) {
+    return {
+      reply: 'You can explore central and state government schemes like PM-KISAN, KCC, and PM-KUSUM under the Schemes section with instant eligibility checks.',
+      lang: 'en-US'
+    };
+  }
+  return {
+    reply: 'Namaste Kisan Bhai. I am AgriBot. You can ask me about mandi queues, slot booking, live crop market prices, or government farmer schemes.',
+    lang: 'en-US'
+  };
+}
+
 const aiAgentController = {
   async chat(req, res) {
     try {
@@ -34,18 +60,6 @@ const aiAgentController = {
       if (!message || !message.trim()) {
         return res.status(400).json({ error: 'Message is required.' });
       }
-
-      if (!process.env.GEMINI_API_KEY) {
-        return res.status(500).json({ error: 'AI service is not configured.' });
-      }
-
-      const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-      const model = genAI.getGenerativeModel({ 
-        model: 'gemini-2.0-flash',
-        systemInstruction: {
-          parts: [{ text: SYSTEM_PROMPT }]
-        }
-      });
 
       const sid = sessionId || 'default';
       if (!chatHistory.has(sid)) {
@@ -58,37 +72,46 @@ const aiAgentController = {
         history.splice(0, history.length - 20);
       }
 
-      const chat = model.startChat({
-        history: history,
+      const messages = [];
+      (history || []).forEach(h => {
+        messages.push({
+          role: h.role === 'model' || h.role === 'assistant' ? 'assistant' : 'user',
+          content: h.parts?.[0]?.text || h.content || ''
+        });
       });
+      messages.push({ role: 'user', content: message.trim() });
 
-      const result = await chat.sendMessage(message.trim());
-      const response = await result.response;
-      const text = response.text();
+      let parsed = null;
 
-      let parsed = { reply: text, lang: 'en-US' };
       try {
-        const cleaned = text.replace(/```json/gi, '').replace(/```/g, '').trim();
-        parsed = JSON.parse(cleaned);
-      } catch (e) {
-        parsed.reply = text;
+        const { text } = await generateChatCompletion({
+          systemPrompt: SYSTEM_PROMPT,
+          messages,
+          temperature: 0.4,
+          jsonMode: false
+        });
+
+        try {
+          const cleaned = text.replace(/```json/gi, '').replace(/```/g, '').trim();
+          parsed = JSON.parse(cleaned);
+        } catch (e) {
+          parsed = { reply: text.replace(/[#*`]/g, '').trim(), lang: 'en-US' };
+        }
+      } catch (aiError) {
+        console.warn('AI chat error, using smart fallback reply:', aiError.message);
+        parsed = getSmartFallbackReply(message);
       }
 
       history.push({ role: 'user', parts: [{ text: message.trim() }] });
       history.push({ role: 'model', parts: [{ text: parsed.reply }] });
 
-      res.json({ reply: parsed.reply, lang: parsed.lang, sessionId: sid });
+      return res.json({ reply: parsed.reply, lang: parsed.lang || 'en-US', sessionId: sid });
     } catch (error) {
       console.error('AI Agent Error:', error.message || error);
-      if (error.message?.includes('API_KEY_INVALID') || error.message?.includes('api key')) {
-        return res.status(500).json({ error: 'Invalid API key. Please check GEMINI_API_KEY in .env file.' });
-      }
-      if (error.message?.includes('quota') || error.message?.includes('QUOTA_EXCEEDED')) {
-        return res.status(500).json({ error: 'API quota exceeded. Please try again later.' });
-      }
       res.status(500).json({ error: 'Failed to get AI response. ' + (error.message || 'Unknown error') });
     }
   }
 };
 
 module.exports = aiAgentController;
+
