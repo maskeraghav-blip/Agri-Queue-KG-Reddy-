@@ -57,8 +57,9 @@ IMPORTANT: Return ONLY the raw JSON object. No markdown code blocks. No explanat
         console.log(`[AI Doctor] ✅ AI response received from ${provider} (${model})`);
         console.log(`[AI Doctor] Raw AI response (first 500 chars): ${text.substring(0, 500)}`);
 
-        // Clean markdown artifacts and parse JSON
-        let cleaned = text.replace(/```json/gi, '').replace(/```/g, '').trim();
+        // Clean thinking tags, markdown artifacts and parse JSON
+        let cleaned = text.replace(/<think>[\s\S]*?<\/think>/gi, '').trim();
+        cleaned = cleaned.replace(/```json/gi, '').replace(/```/g, '').trim();
         
         // Handle cases where model wraps in extra text before/after JSON
         const jsonStart = cleaned.indexOf('{');

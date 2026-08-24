@@ -33,6 +33,7 @@ const GROQ_TEXT_MODELS = [
 ];
 
 const GROQ_VISION_MODELS = [
+  'qwen/qwen3.6-27b',
   'llama-3.2-90b-vision-preview',
   'llama-3.2-11b-vision-preview'
 ];
