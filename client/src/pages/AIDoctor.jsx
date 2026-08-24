@@ -2,6 +2,36 @@ import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import api from '../utils/api';
 
+const compressImage = (file, maxWidth = 1024, quality = 0.82) => {
+  return new Promise((resolve) => {
+    const img = new Image();
+    const objectUrl = URL.createObjectURL(file);
+    img.src = objectUrl;
+    img.onload = () => {
+      URL.revokeObjectURL(objectUrl);
+      let width = img.width;
+      let height = img.height;
+      if (width > maxWidth) {
+        height = Math.round((height * maxWidth) / width);
+        width = maxWidth;
+      }
+      const canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, width, height);
+      const dataUrl = canvas.toDataURL('image/jpeg', quality);
+      resolve(dataUrl);
+    };
+    img.onerror = () => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = () => resolve(null);
+      reader.readAsDataURL(file);
+    };
+  });
+};
+
 export default function AIDoctor() {
   const { t } = useTranslation();
   const [analyzing, setAnalyzing] = useState(false);
@@ -31,27 +61,24 @@ export default function AIDoctor() {
     setAnalyzing(true);
     setResult(null);
     
-    const reader = new FileReader();
-    reader.readAsDataURL(selectedFile);
-    reader.onload = async () => {
-      try {
-        const res = await api.post('/doctor/analyze', {
-          base64Image: reader.result,
-          mimeType: selectedFile.type
-        });
-        setResult(res.data);
-      } catch (err) {
-        console.error('API Error:', err);
-        setResult({
-          disease: 'Analysis Error',
-          confidence: 'N/A',
-          recommendation: err.response?.data?.error || 'Failed to reach AI Server. Ensure GROQ_API_KEY is configured in server/.env.',
-          crop: 'Unknown'
-        });
-      } finally {
-        setAnalyzing(false);
-      }
-    };
+    try {
+      const compressedB64 = await compressImage(selectedFile);
+      const res = await api.post('/doctor/analyze', {
+        base64Image: compressedB64,
+        mimeType: 'image/jpeg'
+      }, { timeout: 120000 });
+      setResult(res.data);
+    } catch (err) {
+      console.error('API Error:', err);
+      setResult({
+        disease: 'Analysis Error',
+        confidence: 'N/A',
+        recommendation: err.response?.data?.error || 'AI Doctor analysis took longer than expected. Please retry with a clear crop photo.',
+        crop: 'Unknown'
+      });
+    } finally {
+      setAnalyzing(false);
+    }
   };
 
   const resetForm = () => {
