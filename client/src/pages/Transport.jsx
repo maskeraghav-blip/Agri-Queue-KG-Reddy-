@@ -15,8 +15,8 @@ export default function Transport() {
       price: 500,
       unit: '/trip',
       rating: '4.8',
-      image: 'https://images.unsplash.com/photo-1559297434-fae8a1916a79?w=600&auto=format&fit=crop&q=80',
-      fallbackImage: '/images/truck1.jpg',
+      image: '/images/truck1.jpg',
+      fallbackImage: 'https://www.bing.com/th/id/OIP.IinE1YYtl5qh0IADy69T6wHaE8?w=193&h=135&c=8&rs=1&qlt=90&o=6&dpr=1.1&pid=ImgAns&rm=2',
       tags: ['1 Ton Capacity', 'Fast']
     },
     {
@@ -26,8 +26,8 @@ export default function Transport() {
       price: 1200,
       unit: '/trip',
       rating: '4.9',
-      image: 'https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=600&auto=format&fit=crop&q=80',
-      fallbackImage: '/images/truck2.jpg',
+      image: '/images/truck2.jpg',
+      fallbackImage: 'https://th.bing.com/th/id/OIP.7VWiuX421H9oFGHW8bFr8gHaE8?w=253&h=180&c=7&r=0&o=7&dpr=1.1&pid=1.7&rm=3',
       tags: ['5 Ton Capacity', 'Covered']
     },
     {
@@ -37,8 +37,8 @@ export default function Transport() {
       price: 800,
       unit: '/trip',
       rating: '4.5',
-      image: 'https://images.unsplash.com/photo-1592878904946-b3cd8ae243d0?w=600&auto=format&fit=crop&q=80',
-      fallbackImage: '/images/truck3.jpg',
+      image: '/images/truck3.jpg',
+      fallbackImage: 'https://th.bing.com/th/id/OIP.Ao9tAFwF5Dbr-dXrxoHBFgHaEx?w=292&h=187&c=7&r=0&o=7&dpr=1.1&pid=1.7&rm=3',
       tags: ['Local Transport', 'High Torque']
     },
     {
@@ -48,8 +48,8 @@ export default function Transport() {
       price: 2500,
       unit: '/trip',
       rating: '4.2',
-      image: 'https://images.unsplash.com/photo-1519003722824-194d4455a60c?w=600&auto=format&fit=crop&q=80',
-      fallbackImage: '/images/truck4.jpg',
+      image: '/images/truck4.jpg',
+      fallbackImage: 'https://www.bing.com/th/id/OIP.bRI9IfYL6dFsdc6LgZep4gHaHa?w=193&h=193&c=8&rs=1&qlt=90&o=6&dpr=1.1&pid=ImgAns&rm=2',
       tags: ['Cold Storage', 'Long Distance']
     }
   ];
