@@ -104,7 +104,11 @@ const agmarknetService = {
           commodities: filterData?.commodityList && filterData.commodityList.length ? filterData.commodityList : getMockCommodities(),
           commodityGroups: filterData?.commodityGroupList || [],
           categories: categoryData || [],
-          states: stateData?.records && stateData.records.length ? stateData.records : (Array.isArray(stateData) && stateData.length ? stateData : getMockStates()),
+          states: stateData?.states && stateData.states.length 
+            ? stateData.states 
+            : (stateData?.records && stateData.records.length 
+              ? stateData.records 
+              : (Array.isArray(stateData) && stateData.length ? stateData : getMockStates())),
           districts: filterData?.districtList || [],
           markets: filterData?.marketList || [],
           varieties: filterData?.varietyList || [],
