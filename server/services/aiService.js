@@ -39,15 +39,13 @@ const GROQ_VISION_MODELS = [
 ];
 
 const GEMINI_TEXT_MODELS = [
-  'gemini-2.0-flash',
-  'gemini-1.5-flash',
-  'gemini-1.5-flash-latest'
+  'gemini-3.5-flash',
+  'gemini-3.6-flash'
 ];
 
 const GEMINI_VISION_MODELS = [
-  'gemini-2.0-flash',
-  'gemini-1.5-flash',
-  'gemini-1.5-pro'
+  'gemini-3.5-flash',
+  'gemini-3.6-flash'
 ];
 
 /**
@@ -145,7 +143,39 @@ async function analyzeImage({ prompt, base64Image, mimeType = 'image/jpeg' }) {
 
   console.log(`[AI Service] analyzeImage called. Image size: ${cleanB64.length} chars base64, mimeType: ${mimeType}`);
 
-  // 1. Try Groq Vision models (multimodal content array)
+  // 1. Try Gemini Vision models (Primary AI Doctor)
+  const gemini = getGeminiClient();
+  if (gemini) {
+    for (const modelName of GEMINI_VISION_MODELS) {
+      try {
+        console.log(`[AI Service] Trying Gemini vision model: ${modelName}`);
+        const model = gemini.getGenerativeModel({
+          model: modelName,
+          generationConfig: { responseMimeType: 'application/json' }
+        });
+        const imageParts = [
+          {
+            inlineData: {
+              data: cleanB64,
+              mimeType
+            }
+          }
+        ];
+        const result = await model.generateContent([prompt, ...imageParts]);
+        const response = await result.response;
+        const text = response.text();
+        if (text) {
+          console.log(`[AI Service] ✅ Gemini vision model ${modelName} succeeded (${text.length} chars)`);
+          return { text, provider: 'gemini', model: modelName };
+        }
+      } catch (err) {
+        lastError = err;
+        console.warn(`[AI Service] ❌ Gemini vision model ${modelName} error:`, err.message || err);
+      }
+    }
+  }
+
+  // 2. Try Groq Vision models (Secondary Fallback)
   if (groq) {
     for (const model of GROQ_VISION_MODELS) {
       try {
@@ -175,35 +205,6 @@ async function analyzeImage({ prompt, base64Image, mimeType = 'image/jpeg' }) {
       } catch (err) {
         lastError = err;
         console.warn(`[AI Service] ❌ Groq vision model ${model} error:`, err.message || err);
-      }
-    }
-  }
-
-  // 2. Try Gemini Vision models
-  const gemini = getGeminiClient();
-  if (gemini) {
-    for (const modelName of GEMINI_VISION_MODELS) {
-      try {
-        console.log(`[AI Service] Trying Gemini vision model: ${modelName}`);
-        const model = gemini.getGenerativeModel({ model: modelName });
-        const imageParts = [
-          {
-            inlineData: {
-              data: cleanB64,
-              mimeType
-            }
-          }
-        ];
-        const result = await model.generateContent([prompt, ...imageParts]);
-        const response = await result.response;
-        const text = response.text();
-        if (text) {
-          console.log(`[AI Service] ✅ Gemini vision model ${modelName} succeeded (${text.length} chars)`);
-          return { text, provider: 'gemini', model: modelName };
-        }
-      } catch (err) {
-        lastError = err;
-        console.warn(`[AI Service] ❌ Gemini vision model ${modelName} error:`, err.message || err);
       }
     }
   }
