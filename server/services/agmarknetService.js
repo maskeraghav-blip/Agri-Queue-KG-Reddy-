@@ -207,26 +207,64 @@ const agmarknetService = {
  */
 function getMockPricesFallback({ commodityId, stateId, districtId, marketId, page, pageSize }) {
   const allMock = [
+    // --- Telangana ---
     { commodityName: 'Tomato', stateName: 'Telangana', districtName: 'Medak', marketName: 'Gajwel Mandi', varietyName: 'Desi', gradeName: 'FAQ', arrivalDate: new Date().toISOString().split('T')[0], minPrice: 2000, maxPrice: 2800, modalPrice: 2400 },
     { commodityName: 'Wheat', stateName: 'Telangana', districtName: 'Nizamabad', marketName: 'Nizamabad Mandi', varietyName: 'Lokwan', gradeName: 'FAQ', arrivalDate: new Date().toISOString().split('T')[0], minPrice: 2100, maxPrice: 2400, modalPrice: 2275 },
     { commodityName: 'Rice (Paddy)', stateName: 'Telangana', districtName: 'Warangal', marketName: 'Warangal Mandi', varietyName: 'Common', gradeName: 'Grade A', arrivalDate: new Date().toISOString().split('T')[0], minPrice: 2100, maxPrice: 2300, modalPrice: 2200 },
-    { commodityName: 'Onion', stateName: 'Maharashtra', districtName: 'Nashik', marketName: 'Lasalgaon Mandi', varietyName: 'Red Onion', gradeName: 'FAQ', arrivalDate: new Date().toISOString().split('T')[0], minPrice: 1500, maxPrice: 2200, modalPrice: 1900 },
-    { commodityName: 'Potato', stateName: 'Uttar Pradesh', districtName: 'Agra', marketName: 'Agra Mandi', varietyName: 'Jyoti', gradeName: 'FAQ', arrivalDate: new Date().toISOString().split('T')[0], minPrice: 1200, maxPrice: 1600, modalPrice: 1400 },
-    { commodityName: 'Cotton', stateName: 'Telangana', districtName: 'Adilabad', marketName: 'Adilabad Mandi', varietyName: 'Medium Staple', gradeName: 'FAQ', arrivalDate: new Date().toISOString().split('T')[0], minPrice: 6500, maxPrice: 7200, modalPrice: 6900 },
+    { commodityName: 'Cotton', stateName: 'Telangana', districtName: 'Warangal', marketName: 'Warangal Mandi', varietyName: 'Medium Staple', gradeName: 'FAQ', arrivalDate: new Date().toISOString().split('T')[0], minPrice: 6500, maxPrice: 7200, modalPrice: 6900 },
     { commodityName: 'Turmeric', stateName: 'Telangana', districtName: 'Nizamabad', marketName: 'Nizamabad Mandi', varietyName: 'Finger', gradeName: 'Premium', arrivalDate: new Date().toISOString().split('T')[0], minPrice: 12000, maxPrice: 14500, modalPrice: 13500 },
     { commodityName: 'Maize', stateName: 'Telangana', districtName: 'Warangal', marketName: 'Warangal Mandi', varietyName: 'Hybrid', gradeName: 'FAQ', arrivalDate: new Date().toISOString().split('T')[0], minPrice: 1800, maxPrice: 2200, modalPrice: 2000 },
+
+    // --- Maharashtra ---
+    { commodityName: 'Onion', stateName: 'Maharashtra', districtName: 'Nashik', marketName: 'Lasalgaon Mandi', varietyName: 'Red Onion', gradeName: 'FAQ', arrivalDate: new Date().toISOString().split('T')[0], minPrice: 1500, maxPrice: 2200, modalPrice: 1900 },
+    { commodityName: 'Tomato', stateName: 'Maharashtra', districtName: 'Nashik', marketName: 'Lasalgaon Mandi', varietyName: 'Local', gradeName: 'FAQ', arrivalDate: new Date().toISOString().split('T')[0], minPrice: 1800, maxPrice: 2600, modalPrice: 2200 },
+    { commodityName: 'Potato', stateName: 'Maharashtra', districtName: 'Pune', marketName: 'Pune Mandi', varietyName: 'Jyoti', gradeName: 'FAQ', arrivalDate: new Date().toISOString().split('T')[0], minPrice: 1300, maxPrice: 1700, modalPrice: 1500 },
+    { commodityName: 'Wheat', stateName: 'Maharashtra', districtName: 'Pune', marketName: 'Pune Mandi', varietyName: 'Sharbati', gradeName: 'Premium', arrivalDate: new Date().toISOString().split('T')[0], minPrice: 2400, maxPrice: 2800, modalPrice: 2600 },
+
+    // --- Andhra Pradesh ---
+    { commodityName: 'Turmeric', stateName: 'Andhra Pradesh', districtName: 'Guntur', marketName: 'Guntur Mandi', varietyName: 'Finger', gradeName: 'Premium', arrivalDate: new Date().toISOString().split('T')[0], minPrice: 11800, maxPrice: 14200, modalPrice: 13000 },
+    { commodityName: 'Chilli', stateName: 'Andhra Pradesh', districtName: 'Guntur', marketName: 'Guntur Mandi', varietyName: 'Teja', gradeName: 'Export Quality', arrivalDate: new Date().toISOString().split('T')[0], minPrice: 18000, maxPrice: 21500, modalPrice: 19500 },
+    { commodityName: 'Onion', stateName: 'Andhra Pradesh', districtName: 'Kurnool', marketName: 'Kurnool Mandi', varietyName: 'Red Onion', gradeName: 'FAQ', arrivalDate: new Date().toISOString().split('T')[0], minPrice: 1400, maxPrice: 2000, modalPrice: 1750 },
+    { commodityName: 'Rice (Paddy)', stateName: 'Andhra Pradesh', districtName: 'Kurnool', marketName: 'Kurnool Mandi', varietyName: 'Sona Masuri', gradeName: 'Premium', arrivalDate: new Date().toISOString().split('T')[0], minPrice: 2300, maxPrice: 2600, modalPrice: 2450 },
+
+    // --- Karnataka ---
+    { commodityName: 'Onion', stateName: 'Karnataka', districtName: 'Hubballi', marketName: 'Hubballi Mandi', varietyName: 'Bangalore Rose', gradeName: 'FAQ', arrivalDate: new Date().toISOString().split('T')[0], minPrice: 1600, maxPrice: 2300, modalPrice: 2050 },
+    { commodityName: 'Rice (Paddy)', stateName: 'Karnataka', districtName: 'Hubballi', marketName: 'Hubballi Mandi', varietyName: 'Jyoti', gradeName: 'Grade A', arrivalDate: new Date().toISOString().split('T')[0], minPrice: 2200, maxPrice: 2450, modalPrice: 2300 },
+    { commodityName: 'Potato', stateName: 'Karnataka', districtName: 'Belagavi', marketName: 'Belagavi Mandi', varietyName: 'Jyoti', gradeName: 'FAQ', arrivalDate: new Date().toISOString().split('T')[0], minPrice: 1100, maxPrice: 1500, modalPrice: 1300 },
+    { commodityName: 'Maize', stateName: 'Karnataka', districtName: 'Belagavi', marketName: 'Belagavi Mandi', varietyName: 'Local Hybrid', gradeName: 'FAQ', arrivalDate: new Date().toISOString().split('T')[0], minPrice: 1750, maxPrice: 2100, modalPrice: 1950 },
+
+    // --- Madhya Pradesh ---
+    { commodityName: 'Soybean', stateName: 'Madhya Pradesh', districtName: 'Indore', marketName: 'Indore Mandi', varietyName: 'Yellow Soybean', gradeName: 'FAQ', arrivalDate: new Date().toISOString().split('T')[0], minPrice: 4200, maxPrice: 4800, modalPrice: 4500 },
+    { commodityName: 'Wheat', stateName: 'Madhya Pradesh', districtName: 'Indore', marketName: 'Indore Mandi', varietyName: 'Malwa Sharbati', gradeName: 'Premium', arrivalDate: new Date().toISOString().split('T')[0], minPrice: 2500, maxPrice: 3000, modalPrice: 2750 },
+    { commodityName: 'Onion', stateName: 'Madhya Pradesh', districtName: 'Ujjain', marketName: 'Ujjain Mandi', varietyName: 'Local Red', gradeName: 'FAQ', arrivalDate: new Date().toISOString().split('T')[0], minPrice: 1300, maxPrice: 1800, modalPrice: 1600 },
+
+    // --- Uttar Pradesh ---
+    { commodityName: 'Potato', stateName: 'Uttar Pradesh', districtName: 'Agra', marketName: 'Agra Mandi', varietyName: 'Jyoti', gradeName: 'FAQ', arrivalDate: new Date().toISOString().split('T')[0], minPrice: 1200, maxPrice: 1600, modalPrice: 1400 },
+    { commodityName: 'Wheat', stateName: 'Uttar Pradesh', districtName: 'Agra', marketName: 'Agra Mandi', varietyName: 'Dara', gradeName: 'FAQ', arrivalDate: new Date().toISOString().split('T')[0], minPrice: 2200, maxPrice: 2400, modalPrice: 2300 },
+    { commodityName: 'Rice (Paddy)', stateName: 'Uttar Pradesh', districtName: 'Lucknow', marketName: 'Lucknow Mandi', varietyName: 'Basmati', gradeName: 'Premium', arrivalDate: new Date().toISOString().split('T')[0], minPrice: 3200, maxPrice: 3800, modalPrice: 3500 },
+    { commodityName: 'Tomato', stateName: 'Uttar Pradesh', districtName: 'Lucknow', marketName: 'Lucknow Mandi', varietyName: 'Desi', gradeName: 'FAQ', arrivalDate: new Date().toISOString().split('T')[0], minPrice: 1800, maxPrice: 2500, modalPrice: 2100 }
   ];
 
   let filtered = allMock;
   if (commodityId) {
-    const names = { 17: 'Wheat', 23: 'Rice (Paddy)', 19: 'Tomato', 20: 'Onion', 21: 'Potato', 22: 'Cotton', 24: 'Turmeric' };
+    const names = { 17: 'Wheat', 23: 'Rice (Paddy)', 19: 'Tomato', 20: 'Onion', 21: 'Potato', 22: 'Cotton', 24: 'Turmeric', 25: 'Maize' };
     const name = names[commodityId];
     if (name) filtered = filtered.filter(f => f.commodityName.toLowerCase() === name.toLowerCase());
   }
   if (stateId) {
-    const states = { 1: 'Telangana', 2: 'Maharashtra', 3: 'Uttar Pradesh' };
+    const states = { 1: 'Telangana', 2: 'Maharashtra', 3: 'Uttar Pradesh', 4: 'Andhra Pradesh', 5: 'Karnataka', 6: 'Madhya Pradesh' };
     const sName = states[stateId];
     if (sName) filtered = filtered.filter(f => f.stateName.toLowerCase() === sName.toLowerCase());
+  }
+  if (districtId) {
+    const districts = { 10: 'Medak', 11: 'Nizamabad', 12: 'Warangal', 13: 'Nashik', 14: 'Agra', 15: 'Pune', 16: 'Lucknow', 17: 'Guntur', 18: 'Kurnool', 19: 'Hubballi', 20: 'Belagavi', 21: 'Indore', 22: 'Ujjain' };
+    const dName = districts[districtId];
+    if (dName) filtered = filtered.filter(f => f.districtName.toLowerCase() === dName.toLowerCase());
+  }
+  if (marketId) {
+    const markets = { 50: 'Gajwel Mandi', 51: 'Nizamabad Mandi', 52: 'Warangal Mandi', 53: 'Lasalgaon Mandi', 54: 'Agra Mandi', 55: 'Pune Mandi', 56: 'Lucknow Mandi', 57: 'Guntur Mandi', 58: 'Kurnool Mandi', 59: 'Hubballi Mandi', 60: 'Belagavi Mandi', 61: 'Indore Mandi', 62: 'Ujjain Mandi' };
+    const mName = markets[marketId];
+    if (mName) filtered = filtered.filter(f => f.marketName.toLowerCase() === mName.toLowerCase());
   }
 
   const start = (page - 1) * pageSize;
@@ -248,6 +286,7 @@ function getMockHistoryFallback(commodityId) {
   let basePrice = 2000;
   if (commodityId == 24) basePrice = 13000; // Turmeric
   if (commodityId == 22) basePrice = 6800;  // Cotton
+  if (commodityId == 20) basePrice = 1900;  // Onion
 
   return dates.map((date, idx) => ({
     date,
@@ -295,7 +334,15 @@ function getMockDistricts() {
     { districtCode: 11, districtName: 'Nizamabad', stateCode: 1 },
     { districtCode: 12, districtName: 'Warangal', stateCode: 1 },
     { districtCode: 13, districtName: 'Nashik', stateCode: 2 },
-    { districtCode: 14, districtName: 'Agra', stateCode: 3 }
+    { districtCode: 15, districtName: 'Pune', stateCode: 2 },
+    { districtCode: 14, districtName: 'Agra', stateCode: 3 },
+    { districtCode: 16, districtName: 'Lucknow', stateCode: 3 },
+    { districtCode: 17, districtName: 'Guntur', stateCode: 4 },
+    { districtCode: 18, districtName: 'Kurnool', stateCode: 4 },
+    { districtCode: 19, districtName: 'Hubballi', stateCode: 5 },
+    { districtCode: 20, districtName: 'Belagavi', stateCode: 5 },
+    { districtCode: 21, districtName: 'Indore', stateCode: 6 },
+    { districtCode: 22, districtName: 'Ujjain', stateCode: 6 }
   ];
 }
 
@@ -305,7 +352,15 @@ function getMockMarkets() {
     { marketCode: 51, marketName: 'Nizamabad Mandi', districtCode: 11 },
     { marketCode: 52, marketName: 'Warangal Mandi', districtCode: 12 },
     { marketCode: 53, marketName: 'Lasalgaon Mandi', districtCode: 13 },
-    { marketCode: 54, marketName: 'Agra Mandi', districtCode: 14 }
+    { marketCode: 55, marketName: 'Pune Mandi', districtCode: 15 },
+    { marketCode: 54, marketName: 'Agra Mandi', districtCode: 14 },
+    { marketCode: 56, marketName: 'Lucknow Mandi', districtCode: 16 },
+    { marketCode: 57, marketName: 'Guntur Mandi', districtCode: 17 },
+    { marketCode: 58, marketName: 'Kurnool Mandi', districtCode: 18 },
+    { marketCode: 59, marketName: 'Hubballi Mandi', districtCode: 19 },
+    { marketCode: 60, marketName: 'Belagavi Mandi', districtCode: 20 },
+    { marketCode: 61, marketName: 'Indore Mandi', districtCode: 21 },
+    { marketCode: 62, marketName: 'Ujjain Mandi', districtCode: 22 }
   ];
 }
 
