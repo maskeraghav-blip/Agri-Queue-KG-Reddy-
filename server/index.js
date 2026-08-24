@@ -38,6 +38,7 @@ app.use('/api/seeds', require('./routes/seedRoutes'));
 app.use('/api/payments', require('./routes/payments'));
 app.use('/api/transport', require('./routes/transportRoutes'));
 app.use('/api/ai-agent', require('./routes/aiAgent'));
+app.use('/api/agri', require('./routes/agri'));
 
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString(), version: '1.0.0', name: 'AgriQueue API' });
@@ -65,3 +66,4 @@ if (process.env.VERCEL) {
     process.exit(1);
   });
 }
+// Trigger server watch reload

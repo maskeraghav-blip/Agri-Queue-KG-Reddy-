@@ -231,6 +231,14 @@ async function initDb() {
     )
   `);
 
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS agmarknet_cache (
+      cache_key VARCHAR(255) PRIMARY KEY,
+      cache_value LONGTEXT NOT NULL,
+      expires_at DATETIME NOT NULL
+    )
+  `);
+
   // Try to alter table to add columns in case it exists
   try { await pool.query('ALTER TABLE seeds ADD COLUMN description TEXT'); } catch(e) {}
   try { await pool.query('ALTER TABLE seeds ADD COLUMN badge VARCHAR(100)'); } catch(e) {}
