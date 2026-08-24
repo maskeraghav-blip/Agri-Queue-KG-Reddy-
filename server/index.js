@@ -7,10 +7,12 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 app.use(cors({ origin: true, credentials: true }));
-app.use(express.json({ limit: '10mb' }));
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
 // Request logging
 app.use((req, res, next) => {
+  req.setTimeout(0); // Unlimited request timeout
   const start = Date.now();
   res.on('finish', () => {
     const duration = Date.now() - start;
