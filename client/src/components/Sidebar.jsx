@@ -46,19 +46,23 @@ export default function Sidebar() {
 
   return (
     <>
-      <div className={`sidebar-toggle ${isOpen ? 'active' : ''}`} onClick={toggle} aria-label="Toggle sidebar">
-        <div className="toggle-track">
-          <div className="toggle-thumb">
-            <span>{isOpen ? '✕' : '☰'}</span>
-          </div>
-        </div>
-      </div>
+      {!isOpen && (
+        <button className="sidebar-open-btn" onClick={toggle} title="Open Menu" aria-label="Open sidebar">
+          <span>☰</span>
+        </button>
+      )}
 
       {isOpen && <div className="sidebar-backdrop" onClick={close} />}
 
       <aside className={`advanced-sidebar ${isOpen ? 'open' : ''}`}>
         <div className="sidebar-header">
-          <h3>🌾 AgriQueue</h3>
+          <div className="sidebar-brand">
+            <span className="sidebar-brand-icon">🌾</span>
+            <span className="sidebar-brand-title">AgriQueue</span>
+          </div>
+          <button className="sidebar-close-btn" onClick={close} title="Close sidebar" aria-label="Close sidebar">
+            ✕
+          </button>
         </div>
         <div className="sidebar-content">
           

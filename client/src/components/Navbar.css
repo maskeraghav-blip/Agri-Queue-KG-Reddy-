@@ -30,11 +30,11 @@
 }
 
 .app[data-sidebar-open="true"] .navbar-brand {
-  margin-left: 76px;
+  margin-left: 0;
 }
 
 .app[data-sidebar-open="false"] .navbar-brand {
-  margin-left: 16px;
+  margin-left: 48px;
 }
 
 .brand-icon { font-size: 28px; }
