@@ -43,17 +43,26 @@ export default function SeedsCatalog() {
   };
 
   const handleCheckout = async () => {
-    if (cartItems.length === 0) return alert('Cart is empty!');
+    if (cartItems.length === 0) return alert('Your cart is empty! Please add seeds to cart before checkout.');
     try {
       const response = await api.post('/seeds/order', { items: cartItems });
       if (response.data.success) {
-        alert('Order placed successfully! Total: ₹' + response.data.total_amount);
         setCartCount(0);
         setCartItems([]);
+        if (response.data.payment_id) {
+          navigate(`/payment/${response.data.payment_id}`);
+        } else if (response.data.order_id) {
+          navigate(`/bill/${response.data.order_id}`);
+        }
       }
     } catch (err) {
       console.error('Failed to place order:', err);
-      alert('Failed to place order. Please login.');
+      if (err.response && err.response.status === 401) {
+        alert('Please log in to proceed to checkout.');
+        navigate('/login');
+      } else {
+        alert('Failed to place order. Please try again.');
+      }
     }
   };
 
@@ -107,7 +116,7 @@ export default function SeedsCatalog() {
                     
                     {/* Rating */}
                     <div style={{ position: 'absolute', top: 12, right: 12, background: 'rgba(255,255,255,0.9)', color: '#D97706', padding: '4px 8px', borderRadius: '4px', fontSize: '0.85rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 4, boxShadow: '0 1px 2px rgba(0,0,0,0.1)' }}>
-                      ★ {seed.rating}
+                      ★ {Number(seed.rating || 4.5).toFixed(1)}
                     </div>
                   </div>
                   

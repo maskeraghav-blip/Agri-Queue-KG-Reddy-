@@ -30,7 +30,7 @@ const seedController = {
 
       const result = await prepareRun(
         'INSERT INTO seed_orders (farmer_id, total_amount, status) VALUES (?, ?, ?)',
-        [farmerId, total, 'completed']
+        [farmerId, total, 'pending']
       );
 
       const orderId = result.lastInsertRowid;
@@ -41,7 +41,12 @@ const seedController = {
         );
       }
 
-      res.json({ success: true, order_id: orderId, total_amount: total });
+      const payResult = await prepareRun(
+        'INSERT INTO payments (order_id, farmer_id, amount, status) VALUES (?, ?, ?, ?)',
+        [orderId, farmerId, total, 'pending']
+      );
+
+      res.json({ success: true, order_id: orderId, payment_id: payResult.lastInsertRowid, total_amount: total });
     } catch (err) {
       console.error(err);
       res.status(500).json({ error: 'Failed to create order' });
